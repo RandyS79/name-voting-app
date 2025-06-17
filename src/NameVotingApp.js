@@ -1,8 +1,5 @@
 
 import { useState } from 'react';
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 export default function NameVotingApp() {
   const [names, setNames] = useState([]);
@@ -10,9 +7,10 @@ export default function NameVotingApp() {
   const [votes, setVotes] = useState({});
 
   const addName = () => {
-    if (newName.trim() && !names.includes(newName.trim())) {
-      setNames([...names, newName.trim()]);
-      setVotes({ ...votes, [newName.trim()]: 0 });
+    const trimmed = newName.trim();
+    if (trimmed && !names.includes(trimmed)) {
+      setNames([...names, trimmed]);
+      setVotes({ ...votes, [trimmed]: 0 });
       setNewName('');
     }
   };
@@ -22,41 +20,30 @@ export default function NameVotingApp() {
   };
 
   return (
-    <div className="p-6 max-w-2xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold text-center">Name Suggestion and Voting App</h1>
+    <div style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto', fontFamily: 'Arial, sans-serif' }}>
+      <h1 style={{ textAlign: 'center' }}>Name Suggestion and Voting App</h1>
 
-      <Card>
-        <CardContent className="space-y-4 p-4">
-          <div className="flex space-x-2">
-            <Input
-              placeholder="Enter a name suggestion"
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-            />
-            <Button onClick={addName}>Add Name</Button>
-          </div>
-        </CardContent>
-      </Card>
+      <div style={{ marginBottom: '2rem' }}>
+        <input
+          style={{ padding: '0.5rem', width: '70%', marginRight: '1rem' }}
+          placeholder='Enter a name suggestion'
+          value={newName}
+          onChange={(e) => setNewName(e.target.value)}
+        />
+        <button style={{ padding: '0.5rem 1rem' }} onClick={addName}>Add Name</button>
+      </div>
 
-      <Card>
-        <CardContent className="p-4">
-          <h2 className="text-xl font-semibold mb-4">Vote for your favorite name:</h2>
-          <div className="space-y-2">
-            {names.map((name) => (
-              <div key={name} className="flex items-center justify-between border p-2 rounded-md">
-                <span>{name}</span>
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-600">{votes[name]} votes</span>
-                  <Button size="sm" onClick={() => voteForName(name)}>
-                    Vote
-                  </Button>
-                </div>
-              </div>
-            ))}
-            {names.length === 0 && <p className="text-gray-500">No names added yet.</p>}
+      <h2>Vote for your favorite name:</h2>
+      {names.length === 0 && <p>No names added yet.</p>}
+      {names.map(name => (
+        <div key={name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}>
+          <span>{name}</span>
+          <div>
+            <span style={{ marginRight: '1rem' }}>{votes[name]} votes</span>
+            <button onClick={() => voteForName(name)}>Vote</button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      ))}
     </div>
   );
 }
